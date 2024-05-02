@@ -1,0 +1,10 @@
+.main_title {
+    font: bold;
+    font-size: 2rem;
+    color: #fff;
+    background-color: rgb(71, 140, 251);
+}
+
+.alert {
+    color: red;
+}

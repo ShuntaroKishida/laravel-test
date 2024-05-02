@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LaravelNews</title>
+    <link rel="stylesheet" href="https://unpkg.com/destyle.css@1.0.5/destyle.css">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
 <body>
     <h1><a href="{{ route('posts.index') }}">Laravel News</a></h1>
@@ -13,25 +15,26 @@
     <form method="POST" action="{{ route('posts.destroy', $post->id) }}">
         @csrf
         @method('DELETE')
-        <button type="submit" onclick="return confirm('マジに削除？');">削除する</button>
+        <button type="submit" onclick="return confirm('マジに削除？');">このニュースを削除する</button>
     </form>
-    <br>
     <h2>コメント投稿</h2>
     <form action="{{ route('comments.store') }}" method="POST">
         @csrf
         <input type="hidden" name="post_id" value="{{ $post->id }}">
         <textarea name="content"></textarea>
-        <br>
         @error('content')
-            <div style="color: red;">{{ $message }}</div>
+            <div class="alert">{{ $message }}</div>
         @enderror
-        <br>
         <button type="submit" onclick="confirm('マジコメントしちゃう？')">コメントする</button>
     </form>
     <h2>コメント一覧</h2>
     @foreach ($post->comments as $comment)
         <div>{{ $comment->content }}</div>
-        <br>
+        <form method="POST" action="{{ route('comments.destroy', $comment->id) }}">
+            @csrf
+            @method('DELETE')
+            <button type="submit" onclick="return confirm('マジに削除？');">このコメントを削除する</button>
+        </form>
     @endforeach
 </body>
 </html>

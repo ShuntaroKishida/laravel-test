@@ -10,3 +10,4 @@ Route::get('/posts/{post}', [PostsController::class, 'show'])->name('posts.show'
 Route::delete('/posts/{post}', [PostsController::class, 'destroy'])->name('posts.destroy');
 
 Route::post('/comments', [CommentsController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [CommentsController::class, 'destroy'])->name('comments.destroy');
