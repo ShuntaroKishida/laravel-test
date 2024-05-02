@@ -23,12 +23,6 @@ class PostsController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function show($id)
-    {
-        $post = Post::with('comments')->find($id);
-        return view('posts.show', ['post' => $post]);
-    }
-
     public function destroy($id)
     {
         $post = Post::find($id);
