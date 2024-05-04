@@ -72,7 +72,7 @@
                     },
                     error: function(xhr) {
                         var errors = xhr.responseJSON.errors;
-                        $('#contentError').text(errors.content ? errors.content[0] : '');
+                        $('#contentError').text(errors.content && errors.content[0]);
                     }
                 });
             } else {

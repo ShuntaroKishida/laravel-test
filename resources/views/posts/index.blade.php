@@ -44,12 +44,10 @@
             e.preventDefault(); // デフォルトのフォーム送信を停止
 
             if (confirm('マジ投稿しちゃう？')) {
-                var formData = $(this).serialize();
-
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('posts.store') }}',
-                    data: formData,
+                    data: $(this).serialize(),
                     success: function(response) {
                         $('#title').val('');
                         $('#message').val('');
@@ -62,8 +60,8 @@
                     },
                     error: function(xhr) {
                         var errors = xhr.responseJSON.errors;
-                        $('#titleError').text(errors.title ? errors.title[0] : '');
-                        $('#messageError').text(errors.message ? errors.message[0] : '');
+                        $('#titleError').text(errors.title && errors.title[0]);
+                        $('#messageError').text(errors.message && errors.message[0]);
                     }
                 });
             } else {
