@@ -14,7 +14,7 @@ class CommentsController extends Controller
         $comment->post_id = $request->post_id;
         $comment->content = $request->content;
         $comment->save();
-        return redirect()->back();
+        return response()->json(['comment' => $comment]);
     }
 
     public function destroy($id)

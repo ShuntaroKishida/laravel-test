@@ -18,23 +18,68 @@
         <button type="submit" onclick="return confirm('マジに削除？');">このニュースを削除する</button>
     </form>
     <h2>コメント投稿</h2>
-    <form action="{{ route('comments.store') }}" method="POST">
+    <form id="commentForm">
         @csrf
         <input type="hidden" name="post_id" value="{{ $post->id }}">
-        <textarea name="content"></textarea>
-        @error('content')
-            <div class="alert">{{ $message }}</div>
-        @enderror
-        <button type="submit" onclick="confirm('マジコメントしちゃう？')">コメントする</button>
+        <textarea name="content" id="content"></textarea>
+        <div id="contentError"></div>
+
+        <button type="submit">コメントする</button>
     </form>
     <h2>コメント一覧</h2>
-    @foreach ($post->comments as $comment)
-        <div>{{ $comment->content }}</div>
-        <form method="POST" action="{{ route('comments.destroy', $comment->id) }}">
-            @csrf
-            @method('DELETE')
-            <button type="submit" onclick="return confirm('マジに削除？');">このコメントを削除する</button>
-        </form>
-    @endforeach
+    <div id="commentsList">
+        @foreach ($post->comments as $comment)
+            <p>{{ $comment->content }}</p>
+            <form method="POST" action="{{ route('comments.destroy', $comment->id) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" onclick="return confirm('マジに削除？');">このコメントを削除する</button>
+            </form>
+        @endforeach
+    </div>
+
+    <script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(document).ready(function() {
+        $('#commentForm').submit(function(e) {
+            e.preventDefault(); // デフォルトのフォーム送信を停止
+
+            if (confirm('マジコメントしちゃう？')) {
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('comments.store') }}',
+                    data: formData,
+                    success: function(response) {
+                        $('#content').val('');
+                        $('#contentError').empty();
+
+                        var newCommentHtml = '<div>' +
+                                            '<p>' + response.comment.content + '</p>' +
+                                            '<form method="POST" action="' + '{{ route('comments.destroy', 'id') }}'.replace('id', response.comment.id) + '">' +
+                                            '@csrf' +
+                                            '<input type="hidden" name="_method" value="DELETE">' +
+                                            '<button type="submit" onclick="return confirm(\'マジに削除？\');">このコメントを削除する</button>' +
+                                            '</form>' +
+                                        '</div>';
+                        $('#commentsList').prepend(newCommentHtml);
+                    },
+                    error: function(xhr) {
+                        var errors = xhr.responseJSON.errors;
+                        $('#contentError').text(errors.content ? errors.content[0] : '');
+                    }
+                });
+            } else {
+                return false;
+            }
+        });
+    });
+    </script>
 </body>
 </html>
