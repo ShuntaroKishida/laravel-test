@@ -50,12 +50,10 @@
             e.preventDefault(); // デフォルトのフォーム送信を停止
 
             if (confirm('マジコメントしちゃう？')) {
-                var formData = $(this).serialize();
-
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('comments.store') }}',
-                    data: formData,
+                    data: $(this).serialize(),
                     success: function(response) {
                         $('#content').val('');
                         $('#contentError').empty();
