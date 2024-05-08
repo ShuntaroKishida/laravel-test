@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LaravelNews</title>
-    <link rel="stylesheet" href="https://unpkg.com/destyle.css@1.0.5/destyle.css">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="https://unpkg.com/destyle.css@1.0.5/destyle.css"> --}}
+    {{-- <link href="{{ asset('css/style.css') }}" rel="stylesheet"> --}}
 </head>
 <body>
     <h1><a href="{{ route('posts.index') }}">Laravel News</a></h1>
